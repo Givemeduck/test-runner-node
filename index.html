@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <style>
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: #eef1f7;
+            padding: 40px;
+            color: #333;
+        }
+
+        h2 {
+            font-size: 28px;
+            margin-bottom: 25px;
+        }
+
+        h3 {
+            font-size: 22px;
+            margin-top: 50px;
+            margin-bottom: 20px;
+        }
+
+        button {
+            background: #0065ff;
+            color: white;
+            border: none;
+            padding: 14px 26px;
+            font-size: 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.15);
+            transition: background 0.2s ease;
+        }
+
+        button:hover {
+            background: #004ec2;
+        }
+
+        #resultsTable {
+            width: 100%;
+            border-collapse: collapse;
+            background: #ffffff;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.12);
+            display: none;
+            margin-top: 30px;
+        }
+
+        #resultsTable thead {
+            background: #f0f3fa;
+        }
+
+        #resultsTable th,
+        #resultsTable td {
+            padding: 16px;
+            font-size: 15px;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f9fbfe;
+        }
+
+        .pass {
+            color: #0a8f14;
+            font-weight: bold;
+        }
+
+        .fail {
+            color: #e02929;
+            font-weight: bold;
+        }
+
+        /* Custom test builder */
+        #customTestBuilder {
+            background: #fff;
+            padding: 22px;
+            border-radius: 10px;
+            box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+        }
+
+        input,
+        select {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 18px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+            font-size: 15px;
+        }
+
+        #custom-results {
+            margin-top: 20px;
+        }
+
+        #spinner {
+            display: none;
+            margin-top: 20px;
+            font-size: 18px;
+            font-weight: bold;
+            background: #fff;
+            padding: 12px;
+            border-radius: 6px;
+            box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.15);
+            width: fit-content;
+        }
+
+        /* Sample scenario buttons */
+        #sampleScenarios {
+            background: #f6f8fc;
+            border: 1px dashed #b7c3dd;
+            border-radius: 8px;
+            padding: 14px 16px;
+            margin-bottom: 22px;
+        }
+
+        #sampleScenarios p {
+            margin: 0 0 10px;
+            font-size: 14px;
+            color: #555;
+        }
+
+        .sample-btn {
+            background: #fff;
+            color: #0065ff;
+            border: 1px solid #0065ff;
+            padding: 8px 14px;
+            font-size: 14px;
+            border-radius: 6px;
+            cursor: pointer;
+            box-shadow: none;
+            margin: 0 8px 8px 0;
+        }
+
+        .sample-btn:hover {
+            background: #eaf1ff;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Regression runner -->
+    <h2>General Regression Test Script</h2>
+    <button onclick="runTest()">Run All Regression Tests</button>
+
+    <div id="spinner">Running tests… please wait.</div>
+
+    <table id="resultsTable">
+        <thead>
+            <tr>
+                <th>Test Case</th>
+                <th>Status</th>
+                <th>Details</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+
+    <!-- Custom test builder -->
+    <h3>Create Your Own Test Plan (Example: Calendar Component)</h3>
+
+    <div id="customTestBuilder">
+
+        <div id="sampleScenarios">
+            <p><strong>Demo: sample scenarios from the Calendar component</strong> — click one to load it into the form below, then hit Generate and Run Test. Swap the URL for your local AEM page first.</p>
+            <button type="button" class="sample-btn" onclick="loadSample('calendar-renders')">Calendar: grid renders</button>
+            <button type="button" class="sample-btn" onclick="loadSample('calendar-week-view')">Calendar: Week view button works</button>
+            <!-- <button type="button" class="sample-btn" onclick="loadSample('calendar-prompt')">Calendar: month/week/day filter (prompt)</button> -->
+        </div>
+
+        <label>1. Enter a URL:</label>
+        <input id="cust-url" placeholder="https://example.com">
+
+        <label>2. Enter Element Selector:</label>
+        <input id="cust-selector"
+            placeholder='Examples: h2, #unique-id, .card, text="Health Services"'>
+
+        <label>3. Choose Action:</label>
+        <select id="cust-action">
+            <option value="check-exists">Check if element exists</option>
+            <option value="click-link">Click the element</option>
+        </select>
+
+        <label>4. Pass Criteria:</label>
+        <input id="cust-pass" placeholder="Example: Element exists">
+
+        <label>5. Fail Criteria:</label>
+        <input id="cust-fail" placeholder="Example: Element not found">
+
+        <button style="background:#28a745;" onclick="generateCustomTest()">Generate and Run Test</button>
+
+        <!--
+        <div style="margin-top:20px;">
+            <label>Or describe the test in plain language:</label>
+            <textarea id="cust-prompt" rows="4" style="width:100%; padding:12px; margin-bottom:18px; border-radius:6px; border:1px solid #ccc; font-size:15px; resize:vertical;" placeholder="Example: I want to test that filtering on the calendar works for month, week, and day views."></textarea>
+            <button style="background:#6f42c1;" onclick="generatePromptTest()">Run Prompt-Based Test</button>
+        </div>
+        -->
+
+        <div id="custom-results"></div>
+    </div>
+
+    <script>
+        // Sample scenarios — real selectors from the Calendar component
+        // (saccounty/eventcalendar), for demoing the custom test builder.
+        const sampleScenarios = {
+            'calendar-renders': {
+                url: 'http://localhost:4502/content/saccounty/en/qa/calendar-test.html',
+                selector: '.saccounty-event-calendar__grid',
+                action: 'check-exists',
+                pass: 'Calendar grid is present on the page',
+                fail: 'Calendar component did not render'
+            },
+            'calendar-week-view': {
+                url: 'http://localhost:4502/content/saccounty/en/qa/calendar-test.html',
+                selector: '.fc-dayGridWeek-button',
+                action: 'click-link',
+                pass: 'Week view button is clickable',
+                fail: 'Week view toggle not found'
+            }
+        };
+
+        function loadSample(id) {
+            // Prompt-based sample ('calendar-prompt') is disabled along with the
+            // "Run Prompt-Based Test" UI above — its #cust-prompt textarea no
+            // longer exists in the DOM.
+            // if (id === 'calendar-prompt') {
+            //     document.getElementById('cust-url').value = 'http://localhost:4502/content/saccounty/en/qa/calendar-test.html';
+            //     document.getElementById('cust-prompt').value =
+            //         'Test that the calendar filters by month, week, and day views.';
+            //     document.getElementById('cust-prompt').scrollIntoView({ behavior: 'smooth', block: 'center' });
+            //     return;
+            // }
+
+            const s = sampleScenarios[id];
+            if (!s) return;
+
+            document.getElementById('cust-url').value = s.url;
+            document.getElementById('cust-selector').value = s.selector;
+            document.getElementById('cust-action').value = s.action;
+            document.getElementById('cust-pass').value = s.pass;
+            document.getElementById('cust-fail').value = s.fail;
+        }
+
+        // Run regression suite
+        async function runTest() {
+            const table = document.getElementById('resultsTable');
+            const tbody = table.querySelector('tbody');
+            const spinner = document.getElementById('spinner');
+
+            tbody.innerHTML = "";
+            table.style.display = "none";
+            spinner.style.display = "block";
+
+            const response = await fetch('/run-test', { method: 'POST' });
+            const results = await response.json();
+
+            spinner.style.display = "none";
+
+            if (!Array.isArray(results)) {
+                tbody.innerHTML = `<tr>
+                    <td colspan="3" class="fail">Backend error: ${results.error}</td>
+                </tr>`;
+                table.style.display = "table";
+                return;
+            }
+
+            results.forEach(r => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${r.testName}</td>
+                    <td class="${r.success ? 'pass' : 'fail'}">
+                        ${r.success ? 'PASS' : 'FAIL'}
+                    </td>
+                    <td>${r.details}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+
+            table.style.display = "table";
+        }
+
+        // Run custom user-generated test
+        async function generateCustomTest() {
+            const payload = {
+                url: document.getElementById('cust-url').value,
+                selector: document.getElementById('cust-selector').value,
+                action: document.getElementById('cust-action').value,
+                passCriteria: document.getElementById('cust-pass').value,
+                failCriteria: document.getElementById('cust-fail').value
+            };
+
+            const response = await fetch('/run-custom-test', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+
+            const result = await response.json();
+
+            document.getElementById('custom-results').innerHTML = `
+                <div style="padding:15px; background:#f8f9fc; border-radius:8px;">
+                    <strong>Result:</strong>
+                    <span style="color:${result.success ? 'green' : 'red'}; font-weight:bold;">
+                        ${result.success ? 'PASS' : 'FAIL'}
+                    </span>
+                    <br><br>
+                    <strong>Details:</strong><br>${result.details}
+                </div>
+            `;
+        }
+
+        async function generatePromptTest() {
+            const prompt = document.getElementById('cust-prompt').value.trim();
+            if (!prompt) {
+                document.getElementById('custom-results').innerHTML = `
+                    <div style="padding:15px; background:#fff0f0; border-radius:8px; color:#b42318;">
+                        Please describe the behavior you want to test.
+                    </div>
+                `;
+                return;
+            }
+
+            const payload = {
+                url: document.getElementById('cust-url').value || 'https://www.saccounty.gov/',
+                prompt,
+                mode: 'natural-language'
+            };
+
+            const response = await fetch('/run-custom-test', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+
+            const result = await response.json();
+
+            document.getElementById('custom-results').innerHTML = `
+                <div style="padding:15px; background:#f8f9fc; border-radius:8px;">
+                    <strong>Prompt test result:</strong>
+                    <span style="color:${result.success ? 'green' : 'red'}; font-weight:bold;">
+                        ${result.success ? 'PASS' : 'FAIL'}
+                    </span>
+                    <br><br>
+                    <strong>Details:</strong><br>${result.details}
+                </div>
+            `;
+        }
+    </script>
+
+</body>
+
+</html>
