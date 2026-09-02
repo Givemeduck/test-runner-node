@@ -1,9 +1,51 @@
 const { chromium } = require("playwright");
+const fs = require("node:fs/promises");
+const path = require("node:path");
+const { randomUUID } = require("node:crypto");
+
+async function captureFailure(page, testName) {
+  try {
+    const folder = path.join(__dirname, "screenshots");
+    await fs.mkdir(folder, { recursive: true });
+
+    const safeName = testName.replace(/[^a-z0-9]+/gi, "-").slice(0, 60);
+
+    const filename = `${safeName}-${randomUUID()}.png`;
+
+    await page.screenshot({
+      path: path.join(folder, filename),
+      fullPage: true,
+      timeout: 5000,
+    });
+
+    return {
+      label: testName,
+      url: `/screenshots/${filename}`,
+    };
+  } catch (err) {
+    console.warn(`Screenshot failed for ${testName}: ${err.message}`);
+
+    return {
+      label: testName,
+      error: "Screenshot unavailable.",
+    };
+  }
+}
 
 async function runPlaywrightTest() {
   const browser = await chromium.launch({ headless: true });
   const page = await browser.newPage();
   const results = [];
+
+  async function recordResult(result) {
+    result.success = Boolean(result.success);
+
+    if (!result.success && !result.screenshots) {
+      result.screenshots = [await captureFailure(page, result.testName)];
+    }
+
+    results.push(result);
+  }
 
   // Disable animations for faster interaction
   try {
@@ -22,13 +64,13 @@ async function runPlaywrightTest() {
     await page.goto(url, { waitUntil: "domcontentloaded" });
     const loadTime = Date.now() - start;
 
-    results.push({
+    await recordResult({
       testName: "Homepage Load",
       success: true,
       details: `Homepage loaded successfully in ${loadTime} ms`,
     });
   } catch (err) {
-    results.push({
+    await recordResult({
       testName: "Homepage Load",
       success: false,
       details: `Error: ${err.message}`,
@@ -78,7 +120,7 @@ async function runPlaywrightTest() {
       modalText.trim().length > 0 &&
       (modalText.includes("No results") || modalText.length > 20);
 
-    results.push({
+    await recordResult({
       testName: "Search Modal Loads",
       success,
       details: success
@@ -86,7 +128,7 @@ async function runPlaywrightTest() {
         : "Modal loaded but no usable search results text found",
     });
   } catch (err) {
-    results.push({
+    await recordResult({
       testName: "Search Modal Loads",
       success: false,
       details: `Error: ${err.message}`,
@@ -119,13 +161,13 @@ async function runPlaywrightTest() {
     const expectedSuffix = "/Departments-and-Offices.html";
     const success = finalUrl.includes(expectedSuffix);
 
-    results.push({
+    await recordResult({
       testName: "Departments & Offices Page",
       success,
       details: success ? `Loaded: ${finalUrl}` : `Unexpected URL: ${finalUrl}`,
     });
   } catch (err) {
-    results.push({
+    await recordResult({
       testName: "Departments & Offices Page",
       success: false,
       details: `Error: ${err.message}`,
@@ -177,6 +219,7 @@ async function runPlaywrightTest() {
     ];
 
     const failures = [];
+    const screenshots = [];
 
     for (const bp of breakpoints) {
       await page.setViewportSize({ width: bp.width, height: bp.height });
@@ -185,20 +228,24 @@ async function runPlaywrightTest() {
       });
 
       const passed = await bp.check(page);
-      if (!passed) failures.push(bp.name);
+      if (!passed) {
+        failures.push(bp.name);
+        screenshots.push(await captureFailure(page, `Responsive ${bp.name}`));
+      }
     }
 
     const success = failures.length === 0;
 
-    results.push({
+    await recordResult({
       testName: "Responsive Rendering (375/1024/1366)",
       success,
       details: success
         ? "Site renders correctly for all 3 views at these breakpoints"
         : `Failed at: ${failures.join(", ")}`,
+      screenshots,
     });
   } catch (err) {
-    results.push({
+    await recordResult({
       testName: "Responsive Rendering (375/1024/1366)",
       success: false,
       details: `Error: ${err.message}`,
@@ -226,7 +273,7 @@ async function runPlaywrightTest() {
     const headingText = (await heading.innerText()).trim();
     const success = headingText.length > 0;
 
-    results.push({
+    await recordResult({
       testName: "Homepage Main Heading",
       success,
       details: success
@@ -234,12 +281,24 @@ async function runPlaywrightTest() {
         : "The main heading is visible but empty.",
     });
   } catch (err) {
-    results.push({
+    await recordResult({
       testName: "Homepage Main Heading",
       success: false,
       details: `Error: ${err.message}`,
     });
   }
+
+  // Temporary check of screenshot capture and dashboard display.
+  await page.setContent(`
+    <h1>Screenshot feature test</h1>
+    <p>This page should appear in the failure screenshot.</p>
+`);
+
+  await recordResult({
+    testName: "Screenshot Demo",
+    success: false,
+    details: "Intentional failure to verify screenshot capture.",
+  });
 
   await browser.close();
   return results;
