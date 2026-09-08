@@ -136,6 +136,28 @@
       .sample-btn:hover {
         background: #eaf1ff;
       }
+
+      #history-panel {
+        margin-top: 35px;
+      }
+
+      #history-table {
+        width: 100%;
+        border-collapse: collapse;
+        background: white;
+      }
+
+      #history-table th,
+      #history-table td {
+        padding: 14px;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+        vertical-align: top;
+      }
+
+      #history-table th {
+        background: #f0f3fa;
+      }
     </style>
   </head>
 
@@ -156,6 +178,37 @@
       </thead>
       <tbody></tbody>
     </table>
+
+    <section id="history-panel">
+      <h3>Run History</h3>
+
+      <p id="history-save-warning" style="color: #b42318"></p>
+
+      <button type="button" onclick="loadHistory()">Refresh History</button>
+
+      <p>Select a run to compare it with the previous saved run.</p>
+
+      <select id="history-select" onchange="renderHistoryComparison()">
+        <option value="">No saved runs</option>
+      </select>
+
+      <p id="history-summary"></p>
+
+      <div style="overflow-x: auto">
+        <table id="history-table" hidden>
+          <thead>
+            <tr>
+              <th>Test Case</th>
+              <th>Previous</th>
+              <th>Selected Run</th>
+              <th>Change</th>
+              <th>Details</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
 
     <!-- Custom test builder -->
     <h3>Create Your Own Test Plan (Example: Calendar Component)</h3>
@@ -273,6 +326,7 @@
         spinner.style.display = "block";
 
         const response = await fetch("/run-test", { method: "POST" });
+        document.getElementById('history-save-warning').textContent = response.headers.get('X-History-Warning') || '';
         const results = await response.json();
 
         spinner.style.display = "none";
@@ -321,6 +375,7 @@
         });
 
         table.style.display = "table";
+        await loadHistory();
       }
 
       // Run custom user-generated test
@@ -391,6 +446,169 @@
                 </div>
             `;
       }
+
+      let savedRuns = [];
+
+      async function loadHistory() {
+        const select = document.getElementById("history-select");
+        const summary = document.getElementById("history-summary");
+        const table = document.getElementById("history-table");
+
+        try {
+          const response = await fetch("/history", {
+            cache: "no-store",
+          });
+
+          const data = await response.json();
+
+          if (!response.ok) {
+            throw new Error(data.error || "Could not load history.");
+          }
+
+          savedRuns = data;
+          select.replaceChildren();
+
+          if (savedRuns.length === 0) {
+            select.add(new Option("No saved runs yet", ""));
+            summary.textContent = "Run the regression suite to save a result.";
+            table.hidden = true;
+            return;
+          }
+
+          savedRuns.forEach((run, index) => {
+            const passed = run.results.filter((r) => r.success).length;
+            const failed = run.results.length - passed;
+            const date = new Date(run.completedAt).toLocaleString();
+
+            select.add(
+              new Option(
+                `${date} — ${passed} passed, ${failed} failed`,
+                String(index),
+              ),
+            );
+          });
+
+          select.value = "0";
+          renderHistoryComparison();
+        } catch (err) {
+          savedRuns = [];
+          select.replaceChildren(new Option("History unavailable", ""));
+          table.hidden = true;
+          summary.textContent = err.message;
+        }
+      }
+
+      function renderHistoryComparison() {
+        const select = document.getElementById("history-select");
+
+        if (select.value === "") return;
+
+        const index = Number(select.value);
+        const currentRun = savedRuns[index];
+        const previousRun = savedRuns[index + 1];
+
+        if (!currentRun) return;
+
+        const summary = document.getElementById("history-summary");
+        const table = document.getElementById("history-table");
+        const tbody = table.querySelector("tbody");
+
+        tbody.replaceChildren();
+        table.hidden = false;
+
+        summary.textContent = previousRun
+          ? `Compared with ${new Date(previousRun.completedAt).toLocaleString()}.`
+          : "First saved run: there is no earlier run to compare.";
+
+        // Match tests by their names.
+        const currentTests = new Map(
+          currentRun.results.map((result) => [result.testName, result]),
+        );
+
+        const previousTests = new Map(
+          (previousRun?.results || []).map((result) => [
+            result.testName,
+            result,
+          ]),
+        );
+
+        const names = new Set([
+          ...currentTests.keys(),
+          ...previousTests.keys(),
+        ]);
+
+        for (const name of names) {
+          const current = currentTests.get(name);
+          const previous = previousTests.get(name);
+
+          let change;
+
+          if (!previousRun) {
+            change = "No baseline";
+          } else if (!previous) {
+            change = "Added test";
+          } else if (!current) {
+            change = "Removed test";
+          } else if (previous.success && !current.success) {
+            change = "New failure";
+          } else if (!previous.success && current.success) {
+            change = "Recovered";
+          } else {
+            change = current.success ? "Still passing" : "Still failing";
+          }
+
+          const row = document.createElement("tr");
+
+          function addCell(text, className = "") {
+            const cell = document.createElement("td");
+            cell.textContent = text;
+            cell.className = className;
+            row.appendChild(cell);
+            return cell;
+          }
+
+          addCell(name);
+
+          addCell(previous ? (previous.success ? "PASS" : "FAIL") : "—");
+
+          addCell(current ? (current.success ? "PASS" : "FAIL") : "—");
+
+          addCell(
+            change,
+            change === "New failure"
+              ? "fail"
+              : change === "Recovered"
+                ? "pass"
+                : "",
+          );
+
+          const detailsCell = addCell(
+            current?.details || "Not included in this run.",
+          );
+
+          // Preserve screenshot links from the selected run.
+          for (const screenshot of current?.screenshots || []) {
+            const container = document.createElement("div");
+
+            if (screenshot.url?.startsWith("/screenshots/")) {
+              const link = document.createElement("a");
+              link.href = screenshot.url;
+              link.target = "_blank";
+              link.rel = "noopener noreferrer";
+              link.textContent = `View screenshot: ${screenshot.label}`;
+              container.appendChild(link);
+            } else {
+              container.textContent =
+                screenshot.error || "Screenshot unavailable.";
+            }
+
+            detailsCell.appendChild(container);
+          }
+
+          tbody.appendChild(row);
+        }
+      }
+      loadHistory();
     </script>
   </body>
 </html>

@@ -300,6 +300,12 @@ async function runPlaywrightTest() {
     details: "Intentional failure to verify screenshot capture.",
   });
 
+  await recordResult({
+    testName: "History Comparison Demo",
+    success: true,
+    details: "Temporary test for checking run comparisons.",
+  });
+  
   await browser.close();
   return results;
 }
