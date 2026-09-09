@@ -1,0 +1,70 @@
+{
+  "id": "b804a2ee-217a-4e87-9f03-d9c6fc86305f",
+  "startedAt": "2026-09-09T18:35:19.050Z",
+  "completedAt": "2026-09-09T18:35:30.045Z",
+  "durationMs": 10995,
+  "results": [
+    {
+      "testName": "Homepage Load",
+      "success": true,
+      "details": "Homepage loaded successfully in 870 ms"
+    },
+    {
+      "testName": "Search Modal Loads",
+      "success": true,
+      "details": "Search modal displayed results or 'No results'"
+    },
+    {
+      "testName": "Departments & Offices Page",
+      "success": true,
+      "details": "Loaded: https://www.saccounty.gov/us/en/Departments-and-Offices.html"
+    },
+    {
+      "testName": "Responsive Rendering (375/1024/1366)",
+      "success": true,
+      "details": "Site renders correctly for all 3 views at these breakpoints",
+      "screenshots": []
+    },
+    {
+      "testName": "Homepage Main Heading",
+      "success": true,
+      "details": "Visible heading: Sacramento County Home"
+    },
+    {
+      "testName": "Screenshot Demo",
+      "success": false,
+      "details": "Intentional failure to verify screenshot capture.",
+      "screenshots": [
+        {
+          "label": "Screenshot Demo",
+          "url": "/screenshots/Screenshot-Demo-aad27c8f-3432-44ad-b286-3e13259a9fdf.png"
+        }
+      ]
+    },
+    {
+      "testName": "History Comparison Demo",
+      "success": true,
+      "details": "Temporary test for checking run comparisons."
+    },
+    {
+      "testName": "Homepage Accessibility",
+      "success": true,
+      "details": "No automated WCAG A or AA violations detected."
+    },
+    {
+      "testName": "Homepage Visual Regression",
+      "success": false,
+      "details": "Screenshot dimensions changed. Expected 1378x4031, received 1378x4058.",
+      "screenshots": [
+        {
+          "label": "Expected baseline",
+          "url": "/visual-regression/baselines/Homepage-Desktop.png"
+        },
+        {
+          "label": "Current screenshot",
+          "url": "/visual-regression/actual/Homepage-Desktop-3c00ea90-4d21-4fc1-98e0-7628676dd824.png"
+        }
+      ]
+    }
+  ]
+}

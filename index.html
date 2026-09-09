@@ -326,7 +326,8 @@
         spinner.style.display = "block";
 
         const response = await fetch("/run-test", { method: "POST" });
-        document.getElementById('history-save-warning').textContent = response.headers.get('X-History-Warning') || '';
+        document.getElementById("history-save-warning").textContent =
+          response.headers.get("X-History-Warning") || "";
         const results = await response.json();
 
         spinner.style.display = "none";

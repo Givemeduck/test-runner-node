@@ -1,0 +1,70 @@
+{
+  "id": "d627ed6e-6fc8-4b8f-8701-a6a246318e04",
+  "startedAt": "2026-09-09T18:41:45.675Z",
+  "completedAt": "2026-09-09T18:41:55.511Z",
+  "durationMs": 9836,
+  "results": [
+    {
+      "testName": "Homepage Load",
+      "success": true,
+      "details": "Homepage loaded successfully in 715 ms"
+    },
+    {
+      "testName": "Search Modal Loads",
+      "success": true,
+      "details": "Search modal displayed results or 'No results'"
+    },
+    {
+      "testName": "Departments & Offices Page",
+      "success": true,
+      "details": "Loaded: https://www.saccounty.gov/us/en/Departments-and-Offices.html"
+    },
+    {
+      "testName": "Responsive Rendering (375/1024/1366)",
+      "success": true,
+      "details": "Site renders correctly for all 3 views at these breakpoints",
+      "screenshots": []
+    },
+    {
+      "testName": "Homepage Main Heading",
+      "success": true,
+      "details": "Visible heading: Sacramento County Home"
+    },
+    {
+      "testName": "Screenshot Demo",
+      "success": false,
+      "details": "Intentional failure to verify screenshot capture.",
+      "screenshots": [
+        {
+          "label": "Screenshot Demo",
+          "url": "/screenshots/Screenshot-Demo-3eba59aa-840d-4951-9c3c-48ea53cff81d.png"
+        }
+      ]
+    },
+    {
+      "testName": "History Comparison Demo",
+      "success": true,
+      "details": "Temporary test for checking run comparisons."
+    },
+    {
+      "testName": "Homepage Accessibility",
+      "success": true,
+      "details": "No automated WCAG A or AA violations detected."
+    },
+    {
+      "testName": "Homepage Visual Regression",
+      "success": false,
+      "details": "Screenshot dimensions changed. Expected 1378x4031, received 1366x768.",
+      "screenshots": [
+        {
+          "label": "Expected baseline",
+          "url": "/visual-regression/baselines/Homepage-Desktop.png"
+        },
+        {
+          "label": "Current screenshot",
+          "url": "/visual-regression/actual/Homepage-Desktop-ee0e9850-cbdd-4cc5-ae98-e4a768403edf.png"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,70 @@
+{
+  "id": "fa51b94b-0271-4116-a802-c64c6d883df0",
+  "startedAt": "2026-09-08T19:38:20.859Z",
+  "completedAt": "2026-09-08T19:38:31.507Z",
+  "durationMs": 10648,
+  "results": [
+    {
+      "testName": "Homepage Load",
+      "success": true,
+      "details": "Homepage loaded successfully in 604 ms"
+    },
+    {
+      "testName": "Search Modal Loads",
+      "success": true,
+      "details": "Search modal displayed results or 'No results'"
+    },
+    {
+      "testName": "Departments & Offices Page",
+      "success": true,
+      "details": "Loaded: https://www.saccounty.gov/us/en/Departments-and-Offices.html"
+    },
+    {
+      "testName": "Responsive Rendering (375/1024/1366)",
+      "success": true,
+      "details": "Site renders correctly for all 3 views at these breakpoints",
+      "screenshots": []
+    },
+    {
+      "testName": "Homepage Main Heading",
+      "success": true,
+      "details": "Visible heading: Sacramento County Home"
+    },
+    {
+      "testName": "Screenshot Demo",
+      "success": false,
+      "details": "Intentional failure to verify screenshot capture.",
+      "screenshots": [
+        {
+          "label": "Screenshot Demo",
+          "url": "/screenshots/Screenshot-Demo-48ba90f9-30fc-481a-9601-932a977ede25.png"
+        }
+      ]
+    },
+    {
+      "testName": "History Comparison Demo",
+      "success": true,
+      "details": "Temporary test for checking run comparisons."
+    },
+    {
+      "testName": "Homepage Accessibility",
+      "success": true,
+      "details": "No automated WCAG A or AA violations detected."
+    },
+    {
+      "testName": "Homepage Visual Regression",
+      "success": true,
+      "details": "Visual comparison passed with 0 changed pixel(s).",
+      "screenshots": [
+        {
+          "label": "Expected baseline",
+          "url": "/visual-regression/baselines/Homepage-Desktop.png"
+        },
+        {
+          "label": "Current screenshot",
+          "url": "/visual-regression/actual/Homepage-Desktop-b067e2d6-b505-4ef4-844c-d53876235757.png"
+        }
+      ]
+    }
+  ]
+}

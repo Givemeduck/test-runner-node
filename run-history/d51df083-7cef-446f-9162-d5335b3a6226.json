@@ -1,0 +1,35 @@
+{
+  "id": "d51df083-7cef-446f-9162-d5335b3a6226",
+  "startedAt": "2026-09-09T19:11:33.165Z",
+  "completedAt": "2026-09-09T19:12:05.709Z",
+  "durationMs": 32544,
+  "results": [
+    {
+      "testName": "Departments Navigation",
+      "success": false,
+      "details": "locator.waitFor: Timeout 15000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('link', { name: 'Government', exact: true }).first() to be visible\u001b[22m\n",
+      "screenshots": [
+        {
+          "label": "Departments Navigation",
+          "url": "/screenshots/Departments-Navigation-a146e1c4-535c-4a96-b8d6-c1fb41429dda.png"
+        }
+      ]
+    },
+    {
+      "testName": "Mobile Navigation Menu",
+      "success": false,
+      "details": "page.waitForFunction: Timeout 10000ms exceeded.",
+      "screenshots": [
+        {
+          "label": "Mobile Navigation Menu",
+          "url": "/screenshots/Mobile-Navigation-Menu-b42ca880-9108-44de-92d6-f48134f78498.png"
+        }
+      ]
+    },
+    {
+      "testName": "Site Accessibility (www.saccounty.gov)",
+      "success": true,
+      "details": "https://www.saccounty.gov/ — No automated WCAG A or AA violations detected."
+    }
+  ]
+}

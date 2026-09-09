@@ -1,0 +1,56 @@
+{
+  "id": "0d50ec47-3a0e-45c1-aa42-1e77195cda61",
+  "startedAt": "2026-09-08T21:27:10.495Z",
+  "completedAt": "2026-09-08T21:27:18.980Z",
+  "durationMs": 8485,
+  "results": [
+    {
+      "testName": "Homepage Load",
+      "success": true,
+      "details": "Homepage loaded successfully in 589 ms"
+    },
+    {
+      "testName": "Search Modal Loads",
+      "success": true,
+      "details": "Search modal displayed results or 'No results'"
+    },
+    {
+      "testName": "Departments & Offices Page",
+      "success": true,
+      "details": "Loaded: https://www.saccounty.gov/us/en/Departments-and-Offices.html"
+    },
+    {
+      "testName": "Responsive Rendering (375/1024/1366)",
+      "success": true,
+      "details": "Site renders correctly for all 3 views at these breakpoints",
+      "screenshots": []
+    },
+    {
+      "testName": "Homepage Main Heading",
+      "success": true,
+      "details": "Visible heading: Sacramento County Home"
+    },
+    {
+      "testName": "Homepage Accessibility",
+      "success": false,
+      "details": "Accessibility test error: AxeBuilder is not defined",
+      "screenshots": [
+        {
+          "label": "Homepage Accessibility",
+          "url": "/screenshots/Homepage-Accessibility-a27beaf8-8a05-4ae0-bb4e-87f80f00e02b.png"
+        }
+      ]
+    },
+    {
+      "testName": "Homepage Visual Regression",
+      "success": false,
+      "details": "Visual test error: compareScreenshot is not defined",
+      "screenshots": [
+        {
+          "label": "Homepage Visual Regression",
+          "url": "/screenshots/Homepage-Visual-Regression-95b6d1d8-b54a-4c36-9300-7b065074a08d.png"
+        }
+      ]
+    }
+  ]
+}

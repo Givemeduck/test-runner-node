@@ -1,0 +1,54 @@
+{
+  "id": "22616d4a-abe4-4615-8c97-0cd24c9ff014",
+  "startedAt": "2026-09-08T19:54:13.986Z",
+  "completedAt": "2026-09-08T19:54:24.271Z",
+  "durationMs": 10285,
+  "results": [
+    {
+      "testName": "Homepage Load",
+      "success": true,
+      "details": "Homepage loaded successfully in 687 ms"
+    },
+    {
+      "testName": "Search Modal Loads",
+      "success": true,
+      "details": "Search modal displayed results or 'No results'"
+    },
+    {
+      "testName": "Departments & Offices Page",
+      "success": true,
+      "details": "Loaded: https://www.saccounty.gov/us/en/Departments-and-Offices.html"
+    },
+    {
+      "testName": "Responsive Rendering (375/1024/1366)",
+      "success": true,
+      "details": "Site renders correctly for all 3 views at these breakpoints",
+      "screenshots": []
+    },
+    {
+      "testName": "Homepage Main Heading",
+      "success": true,
+      "details": "Visible heading: Sacramento County Home"
+    },
+    {
+      "testName": "Homepage Accessibility",
+      "success": true,
+      "details": "No automated WCAG A or AA violations detected."
+    },
+    {
+      "testName": "Homepage Visual Regression",
+      "success": true,
+      "details": "Visual comparison passed with 0 changed pixel(s).",
+      "screenshots": [
+        {
+          "label": "Expected baseline",
+          "url": "/visual-regression/baselines/Homepage-Desktop.png"
+        },
+        {
+          "label": "Current screenshot",
+          "url": "/visual-regression/actual/Homepage-Desktop-368207fc-7dc5-4bf8-9499-1aba8c2a9051.png"
+        }
+      ]
+    }
+  ]
+}

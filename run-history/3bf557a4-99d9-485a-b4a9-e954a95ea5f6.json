@@ -1,0 +1,30 @@
+{
+  "id": "3bf557a4-99d9-485a-b4a9-e954a95ea5f6",
+  "startedAt": "2026-09-08T21:26:19.437Z",
+  "completedAt": "2026-09-08T21:26:48.682Z",
+  "durationMs": 29245,
+  "results": [
+    {
+      "testName": "Departments Navigation",
+      "success": false,
+      "details": "Error: locator.waitFor: Timeout 15000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('link', { name: 'Government', exact: true }).first() to be visible\u001b[22m\n",
+      "screenshots": [
+        {
+          "label": "Departments Navigation",
+          "url": "/screenshots/Departments-Navigation-710706c0-52f5-43a1-b76f-667d2adc7d0a.png"
+        }
+      ]
+    },
+    {
+      "testName": "Mobile Navigation Menu",
+      "success": false,
+      "details": "Error: page.waitForFunction: Timeout 10000ms exceeded.",
+      "screenshots": [
+        {
+          "label": "Mobile Navigation Menu",
+          "url": "/screenshots/Mobile-Navigation-Menu-26ec4b88-54ca-4877-abe0-8e9d59709766.png"
+        }
+      ]
+    }
+  ]
+}

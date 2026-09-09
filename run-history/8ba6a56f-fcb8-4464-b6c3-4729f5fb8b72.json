@@ -1,0 +1,71 @@
+{
+  "id": "8ba6a56f-fcb8-4464-b6c3-4729f5fb8b72",
+  "startedAt": "2026-09-08T21:15:00.732Z",
+  "completedAt": "2026-09-08T21:15:35.905Z",
+  "durationMs": 35173,
+  "results": [
+    {
+      "testName": "Homepage Availability",
+      "success": true,
+      "durationMs": 854,
+      "details": "HTTP 200; title \"Sacramento County Home\"; loaded in 854 ms."
+    },
+    {
+      "testName": "Homepage Main Heading",
+      "success": true,
+      "details": "The Sacramento County Home H1 is visible."
+    },
+    {
+      "testName": "Site Search",
+      "success": true,
+      "details": "Search completed with 10 result element(s)."
+    },
+    {
+      "testName": "Departments Navigation",
+      "success": false,
+      "details": "Error: locator.waitFor: Timeout 15000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('link', { name: 'Government', exact: true }).first() to be visible\u001b[22m\n",
+      "screenshots": [
+        {
+          "label": "Departments Navigation",
+          "url": "/screenshots/Departments-Navigation-cc079f83-7cc4-42a6-9de2-c1d6f777cf44.png"
+        }
+      ]
+    },
+    {
+      "testName": "Mobile Navigation Menu",
+      "success": false,
+      "details": "Error: page.waitForFunction: Timeout 10000ms exceeded.",
+      "screenshots": [
+        {
+          "label": "Mobile Navigation Menu",
+          "url": "/screenshots/Mobile-Navigation-Menu-16623002-1e55-4200-9609-0bec85b14d4f.png"
+        }
+      ]
+    },
+    {
+      "testName": "Required Footer Links",
+      "success": true,
+      "details": "Found: Accessibility Policy, Privacy Policy, Contact Us."
+    },
+    {
+      "testName": "Homepage Accessibility",
+      "success": true,
+      "details": "No automated WCAG A or AA violations detected."
+    },
+    {
+      "testName": "Homepage Visual Regression",
+      "success": true,
+      "details": "Visual comparison passed with 0 changed pixel(s).",
+      "screenshots": [
+        {
+          "label": "Expected baseline",
+          "url": "/visual-regression/baselines/Homepage-Desktop.png"
+        },
+        {
+          "label": "Current screenshot",
+          "url": "/visual-regression/actual/Homepage-Desktop-60b4a7f7-2951-4144-9de1-43a04488780f.png"
+        }
+      ]
+    }
+  ]
+}
