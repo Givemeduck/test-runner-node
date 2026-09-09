@@ -1,4 +1,4 @@
-const { chromium, firefox } = require("playwright");
+const { chromium } = require("playwright");
 
 // Local AEM author (localhost:4502) requires a login. Sling picks the
 // challenge style per-request: a plain script client (curl, no browser

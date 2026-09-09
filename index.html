@@ -164,6 +164,16 @@
   <body>
     <!-- Regression runner -->
     <h2>General Regression Test Script</h2>
+
+    <label for="accessibility-url"> Page URL for accessibility check: </label>
+
+    <input
+      id="accessibility-url"
+      type="url"
+      value="https://www.saccounty.gov/"
+      placeholder="https://www.saccounty.gov/us/en/example-page.html"
+    />
+
     <button onclick="runTest()">Run All Regression Tests</button>
 
     <div id="spinner">Running tests… please wait.</div>
@@ -325,7 +335,21 @@
         table.style.display = "none";
         spinner.style.display = "block";
 
-        const response = await fetch("/run-test", { method: "POST" });
+        const accessibilityUrl = document
+          .getElementById("accessibility-url")
+          .value.trim();
+
+        const response = await fetch("/run-test", {
+          method: "POST",
+
+          headers: {
+            "Content-Type": "application/json",
+          },
+
+          body: JSON.stringify({
+            accessibilityUrl,
+          }),
+        });
         document.getElementById("history-save-warning").textContent =
           response.headers.get("X-History-Warning") || "";
         const results = await response.json();

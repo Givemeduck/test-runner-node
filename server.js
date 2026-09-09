@@ -29,7 +29,9 @@ app.post("/run-test", async (req, res) => {
   const startedAt = new Date().toISOString();
 
   try {
-    const results = await runPlaywrightTest();
+    const results = await runPlaywrightTest({
+      accessibilityUrl: req.body?.accessibilityUrl,
+    });
 
     // Save history BEFORE sending the response.
     try {

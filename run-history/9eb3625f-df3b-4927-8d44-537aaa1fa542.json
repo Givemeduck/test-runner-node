@@ -1,0 +1,61 @@
+{
+  "id": "9eb3625f-df3b-4927-8d44-537aaa1fa542",
+  "startedAt": "2026-09-09T20:48:34.783Z",
+  "completedAt": "2026-09-09T20:48:43.351Z",
+  "durationMs": 8568,
+  "results": [
+    {
+      "testName": "Homepage Load",
+      "success": true,
+      "details": "Homepage loaded successfully in 671 ms"
+    },
+    {
+      "testName": "Search Modal Loads",
+      "success": true,
+      "details": "Search modal displayed results or 'No results'"
+    },
+    {
+      "testName": "Departments & Offices Page",
+      "success": true,
+      "details": "Loaded: https://www.saccounty.gov/us/en/Departments-and-Offices.html"
+    },
+    {
+      "testName": "Responsive Rendering (375/1024/1366)",
+      "success": true,
+      "details": "Site renders correctly for all 3 views at these breakpoints",
+      "screenshots": []
+    },
+    {
+      "testName": "Homepage Main Heading",
+      "success": true,
+      "details": "Visible heading: Sacramento County Home"
+    },
+    {
+      "testName": "Screenshot Demo",
+      "success": false,
+      "details": "Intentional failure to verify screenshot capture.",
+      "screenshots": [
+        {
+          "label": "Screenshot Demo",
+          "url": "/screenshots/Screenshot-Demo-f16c15b2-cbfd-4ad5-8d57-41dc9d28a68e.png"
+        }
+      ]
+    },
+    {
+      "testName": "History Comparison Demo",
+      "success": true,
+      "details": "Temporary test for checking run comparisons."
+    },
+    {
+      "testName": "Page Accessibility",
+      "success": false,
+      "details": "Accessibility check failed for http://localhost:4502/content/saccounty/en/qa/calendar-test.html: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:4502/content/saccounty/en/qa/calendar-test.html\nCall log:\n\u001b[2m  - navigating to \"http://localhost:4502/content/saccounty/en/qa/calendar-test.html\", waiting until \"domcontentloaded\"\u001b[22m\n",
+      "screenshots": [
+        {
+          "label": "Page Accessibility",
+          "url": "/screenshots/Page-Accessibility-ab4bddf8-a518-4b44-917f-86ba63f4b96b.png"
+        }
+      ]
+    }
+  ]
+}

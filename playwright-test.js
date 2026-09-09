@@ -2,6 +2,19 @@ const { chromium } = require("playwright");
 const fs = require("node:fs/promises");
 const path = require("node:path");
 const { randomUUID } = require("node:crypto");
+const checkAccessibility = require("./accessibility-check");
+
+const DEFAULT_ACCESSIBILITY_URL = "https://www.saccounty.gov/";
+
+function normalizeAccessibilityUrl(value) {
+  const url = new URL(value || DEFAULT_ACCESSIBILITY_URL);
+
+  if (url.protocol !== "http:" && url.protocol !== "https:") {
+    throw new Error("Accessibility URL must begin with http:// or https://.");
+  }
+
+  return url.href;
+}
 
 async function captureFailure(page, testName) {
   try {
@@ -32,9 +45,19 @@ async function captureFailure(page, testName) {
   }
 }
 
-async function runPlaywrightTest() {
+async function runPlaywrightTest(options = {}) {
+  const accessibilityUrl = normalizeAccessibilityUrl(options.accessibilityUrl);
   const browser = await chromium.launch({ headless: true });
-  const page = await browser.newPage();
+  const context = await browser.newContext({
+    viewport: {
+      width: 1366,
+      height: 768,
+    },
+    locale: "en-US",
+    colorScheme: "light",
+    reducedMotion: "reduce",
+  });
+  const page = await context.newPage();
   const results = [];
 
   async function recordResult(result) {
@@ -305,7 +328,71 @@ async function runPlaywrightTest() {
     success: true,
     details: "Temporary test for checking run comparisons.",
   });
-  
+
+  // --------------------------------------------------
+  // Accessibility check for the selected webpage
+  // --------------------------------------------------
+
+  try {
+    await page.setViewportSize({
+      width: 1366,
+      height: 768,
+    });
+
+    const response = await page.goto(accessibilityUrl, {
+      waitUntil: "domcontentloaded",
+      timeout: 30000,
+    });
+
+    if (!response) {
+      throw new Error(`No HTTP response received for ${accessibilityUrl}`);
+    }
+
+    if (!response.ok()) {
+      throw new Error(
+        `${accessibilityUrl} returned HTTP ` + `status ${response.status()}.`,
+      );
+    }
+
+    if (page.context() !== context) {
+      throw new Error(
+        "Accessibility page is not using the explicitly created browser context.",
+      );
+    }
+
+    console.log("Running accessibility check using:", {
+      runnerFile: __filename,
+      url: page.url(),
+      explicitContext: page.context() === context,
+    });
+
+    const accessibilityResult = await checkAccessibility(page);
+
+    await recordResult({
+      testName: "Page Accessibility",
+
+      success: accessibilityResult.success,
+
+      details: `Checked ${accessibilityUrl}. ` + accessibilityResult.details,
+
+      violations: accessibilityResult.violations,
+
+      affectedElements: accessibilityResult.affectedElements,
+    });
+  } catch (error) {
+    await recordResult({
+      testName: "Page Accessibility",
+
+      success: false,
+
+      details:
+        `Accessibility check failed for ` +
+        `${accessibilityUrl}: ` +
+        error.message,
+    });
+  }
+
+  await context.close();
   await browser.close();
   return results;
 }

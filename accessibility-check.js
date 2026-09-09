@@ -12,24 +12,40 @@ async function checkAccessibility(page) {
       success: true,
       details: "No automated WCAG A or AA violations detected.",
       violations: [],
+      affectedElements: 0,
     };
   }
 
+  const affectedElements = report.violations.reduce(
+    (total, violation) => total + violation.nodes.length,
+    0,
+  );
+
   const summary = report.violations
-    .slice(0, 5)
     .map((violation) => {
+      const impact = violation.impact || "impact unknown";
+
       return (
-        `${violation.id}: ` + `${violation.nodes.length} affected element(s)`
+        `${violation.id} (${impact}): ` +
+        `${violation.nodes.length} affected element(s)`
       );
     })
     .join(" | ");
 
   return {
     success: false,
+
     details:
       `${report.violations.length} accessibility ` +
-      `violation type(s) found. ${summary}`,
+      `violation type(s) found across ` +
+      `${affectedElements} affected element(s). ` +
+      summary,
+
+    // This contains the complete axe-core results,
+    // not only the violations displayed in the summary.
     violations: report.violations,
+
+    affectedElements,
   };
 }
 

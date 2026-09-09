@@ -1,0 +1,57 @@
+{
+  "id": "08209b1b-b43f-4478-b94e-8583eed4bd4a",
+  "startedAt": "2026-09-09T20:49:50.280Z",
+  "completedAt": "2026-09-09T20:49:59.201Z",
+  "durationMs": 8921,
+  "results": [
+    {
+      "testName": "Homepage Load",
+      "success": true,
+      "details": "Homepage loaded successfully in 743 ms"
+    },
+    {
+      "testName": "Search Modal Loads",
+      "success": true,
+      "details": "Search modal displayed results or 'No results'"
+    },
+    {
+      "testName": "Departments & Offices Page",
+      "success": true,
+      "details": "Loaded: https://www.saccounty.gov/us/en/Departments-and-Offices.html"
+    },
+    {
+      "testName": "Responsive Rendering (375/1024/1366)",
+      "success": true,
+      "details": "Site renders correctly for all 3 views at these breakpoints",
+      "screenshots": []
+    },
+    {
+      "testName": "Homepage Main Heading",
+      "success": true,
+      "details": "Visible heading: Sacramento County Home"
+    },
+    {
+      "testName": "Screenshot Demo",
+      "success": false,
+      "details": "Intentional failure to verify screenshot capture.",
+      "screenshots": [
+        {
+          "label": "Screenshot Demo",
+          "url": "/screenshots/Screenshot-Demo-60ab0d0f-771a-4252-9cc5-b8c875ab09db.png"
+        }
+      ]
+    },
+    {
+      "testName": "History Comparison Demo",
+      "success": true,
+      "details": "Temporary test for checking run comparisons."
+    },
+    {
+      "testName": "Page Accessibility",
+      "success": true,
+      "details": "Checked https://www.saccounty.gov/us/en/Purchasing-Bids-and-Selling-to-the-County.html#gsc.tab=0. No automated WCAG A or AA violations detected.",
+      "violations": [],
+      "affectedElements": 0
+    }
+  ]
+}

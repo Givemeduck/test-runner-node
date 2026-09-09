@@ -1,0 +1,61 @@
+{
+  "id": "5f09efb2-e587-4cba-9fd9-da23079ccbc5",
+  "startedAt": "2026-09-09T19:58:07.582Z",
+  "completedAt": "2026-09-09T19:58:22.154Z",
+  "durationMs": 14572,
+  "results": [
+    {
+      "testName": "Homepage Load",
+      "success": true,
+      "details": "Homepage loaded successfully in 684 ms"
+    },
+    {
+      "testName": "Search Modal Loads",
+      "success": true,
+      "details": "Search modal displayed results or 'No results'"
+    },
+    {
+      "testName": "Departments & Offices Page",
+      "success": true,
+      "details": "Loaded: https://www.saccounty.gov/us/en/Departments-and-Offices.html"
+    },
+    {
+      "testName": "Responsive Rendering (375/1024/1366)",
+      "success": true,
+      "details": "Site renders correctly for all 3 views at these breakpoints",
+      "screenshots": []
+    },
+    {
+      "testName": "Homepage Main Heading",
+      "success": true,
+      "details": "Visible heading: Sacramento County Home"
+    },
+    {
+      "testName": "Screenshot Demo",
+      "success": false,
+      "details": "Intentional failure to verify screenshot capture.",
+      "screenshots": [
+        {
+          "label": "Screenshot Demo",
+          "url": "/screenshots/Screenshot-Demo-dd782ea9-1b25-4589-9777-4eb3ca978d64.png"
+        }
+      ]
+    },
+    {
+      "testName": "History Comparison Demo",
+      "success": true,
+      "details": "Temporary test for checking run comparisons."
+    },
+    {
+      "testName": "Page Accessibility",
+      "success": false,
+      "details": "Accessibility check failed for https://www.saccounty.gov/: Please use browser.newContext()\n Please check out https://github.com/dequelabs/axe-core-npm/blob/develop/packages/playwright/error-handling.md",
+      "screenshots": [
+        {
+          "label": "Page Accessibility",
+          "url": "/screenshots/Page-Accessibility-e93a8176-674f-469c-8b40-7e875d6b6e92.png"
+        }
+      ]
+    }
+  ]
+}
